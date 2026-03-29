@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "사용자 정보 (학생 또는 교사)",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "사용자 이름 또는 닉네임" },
+        "role": { "type": "string", "enum": ["student", "teacher"], "description": "사용자 역할" },
+        "studentNumber": { "type": "string", "description": "학생 번호 (학생인 경우)" },
+        "email": { "type": "string", "description": "이메일 주소" }
+      },
+      "required": ["uid", "name", "role"]
+    },
+    "DailyEmotion": {
+      "title": "Daily Emotion",
+      "description": "학생의 일일 감정 분석 결과",
+      "type": "object",
+      "properties": {
+        "studentUid": { "type": "string", "description": "학생 UID" },
+        "studentName": { "type": "string", "description": "학생 이름" },
+        "studentNumber": { "type": "string", "description": "학생 번호" },
+        "inputText": { "type": "string", "description": "학생이 입력한 텍스트/이모티콘" },
+        "dominant_emotion": { "type": "string", "description": "주요 감정" },
+        "intensity": { "type": "number", "description": "감정 강도 (1-10)" },
+        "summary": { "type": "string", "description": "AI 요약" },
+        "requires_attention": { "type": "boolean", "description": "교사 개입 필요 여부" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "생성 일시" }
+      },
+      "required": ["studentUid", "inputText", "dominant_emotion", "intensity", "requires_attention", "createdAt"]
+    },
+    "CounselingRequest": {
+      "title": "Counseling Request",
+      "description": "심리 상담 예약 요청",
+      "type": "object",
+      "properties": {
+        "studentUid": { "type": "string", "description": "학생 UID" },
+        "studentName": { "type": "string", "description": "학생 이름" },
+        "status": { "type": "string", "enum": ["pending", "approved", "completed"], "description": "상담 상태" },
+        "requestDate": { "type": "string", "format": "date-time", "description": "요청 일시" },
+        "message": { "type": "string", "description": "학생의 추가 메시지" }
+      },
+      "required": ["studentUid", "status", "requestDate"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "사용자 프로필 정보"
+    },
+    "/daily_emotions/{emotionId}": {
+      "schema": "DailyEmotion",
+      "description": "일일 감정 분석 데이터"
+    },
+    "/counseling_requests/{requestId}": {
+      "schema": "CounselingRequest",
+      "description": "상담 예약 요청 데이터"
+    }
+  }
+}
